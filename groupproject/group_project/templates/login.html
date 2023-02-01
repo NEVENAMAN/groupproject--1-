@@ -40,6 +40,9 @@
                 font-size: 3.5rem;
             }
         }
+        .error_message{
+            color: red;
+        }
     </style>
     <!-- Custom styles for this template -->
     <link href="{% static 'css/floating-labels.css' %}" rel="stylesheet">
@@ -75,6 +78,7 @@
         </div>
         </nav>
     <form class="form-signin" action='/login' method="POST">
+        {% csrf_token%}
         <div class="text-center mb-4">
             <img class="mb-4" src="{% static 'images/repair-icon.png' %}" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Welcome to Repair Shop</h1>
@@ -82,14 +86,24 @@
         </div>
 
         <div class="form-label-group">
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" autofocus>
             <label for="inputEmail">Email address</label>
         </div>
+        {% for message in messages %}
+            {% if message.extra_tags == 'user_not_found' %}
+                <p class="error_message">* {{message}}</p>
+            {% endif %}
+        {% endfor %}
 
         <div class="form-label-group">
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" >
             <label for="inputPassword">Password</label>
         </div>
+        {% for message in messages %}
+            {% if message.extra_tags == 'incorrect_password' %}
+                <p class="error_message">* {{message}}</p>
+            {% endif %}
+        {% endfor %}
         <div class="checkbox mb-3">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
