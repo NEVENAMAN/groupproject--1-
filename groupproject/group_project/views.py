@@ -62,6 +62,9 @@ def register(request):
             print("***** 4 ")
         return redirect('/')
 
+# register customer page
+def register_customer_page(request):
+    return render(request,'register_customer.html')
 # admin dashboard
 def admin_dash(request):
     return render(request,'admin_dashboard.html')
@@ -69,3 +72,7 @@ def admin_dash(request):
 # admin dashboard
 def employe_dash(request):
     return render(request,'admin_dashboard.html')
+
+# send ticket page
+def send_ticket(request):
+    return render(request,'send_ticket.html')

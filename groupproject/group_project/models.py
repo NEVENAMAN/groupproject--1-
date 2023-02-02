@@ -6,7 +6,6 @@ class Usermanager(models.Manager):
     def member_validator(self, postData ):
         errors = {}
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        password_regex =re.compile(r'^[a-zA-Z0-9.+_-]')
         special_symbols = ['$','@','#','%','^','&']
 
         if len(postData['first_name']) < 3 :
@@ -50,25 +49,46 @@ class Usermanager(models.Manager):
         if (bcrypt.checkpw(postData['password'].encode(), user.password.encode()) != True):
             error['incorrect_password'] = "you insert password error"
         return error
-
-    def customer_validator(self, postData):
-        errors = {}
-        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        password_regex =re.compile(r'^[a-zA-Z0-9.+_-]')
+    
+    def customer_validation(self, postData):
+        errors= {}
         special_symbols = ['$','@','#','%','^','&']
-
-        if len(postData['full_name']) < 2:
-            errors["full_name"] = "name should be at least 2characters"
-        if len(postData['Address']) < 2:
-            errors["Address"] = "Address should be at least 2characters"
+        if len(postData['full_name']) < 5:
+            errors["full_name"] = "name should be at least 5 characters"
+        if len(postData['address']) < 5:
+            errors["address"] = "Address should be at least 5 characters"
         if len(postData['mobile_num']) < 9:
-            errors["mobile_num"] = "number should be at least 9characters"
-        if len(postData['identity_num']) < 10:
-            errors["identity_num"] = "scope of work should be at least 10characters"
+            errors["mobile_num"] = "number should be at least 9 characters"
+        if len(postData['identity_num']) < 9:
+            errors["identity_num"] = "scope of work should be at least 9 characters"
         if len(postData['password']) < 8:
             errors["password"] = "user password should be at least 8characters"
-        if len(postData['cpassword']) <8:
-            errors["cpassword"] = "user cpassword should be at least 8characters"
+        if not any(characters.isupper() for characters in postData['password']):
+            errors['password_notInclude_upper'] = "Password must have at least one uppercase character"
+        if not any(characters.islower() for characters in postData['password']):
+            errors['password_notInclude_lower'] = "Password must have at least one lowercase character"
+        if not any(characters.isdigit() for characters in postData['password']):
+            errors['password_notInclude_number'] = "Password must have at least one numeric character."
+        if not any(characters in special_symbols for characters in postData['password']):
+            errors['password_symbol'] = "Password should have at least one of the symbols $@#%^&"
+        if postData['password'] != postData['confirm_password']:
+            errors['not_the_same'] = "please insert password similer as above"
+        return errors
+
+    def ticket_validation(self, postData):
+        errors = {}
+        if len(postData['full_name']) < 5:
+            errors["full_name"] = "name should be at least 5 characters"
+        if len(postData['address']) < 5:
+            errors["address"] = "Address should be at least 5 characters"
+        if len(postData['mobile_num']) < 9:
+            errors["mobile_num"] = "number should be at least 9 characters"
+        if len(postData['identity_num']) < 9:
+            errors["identity_num"] = "scope of work should be at least 9 characters"
+        if len(postData['problem_desc']) < 5:
+            errors["problem_desc"] = "name should be at least 5 characters"
+        if len(postData['employee']) < 5:
+            errors["employee"] = "name should be at least 5 characters"
         return errors 
 
 class userLevel(models.Model):
@@ -90,8 +110,31 @@ class members(models.Model):
     identity_image = models.FileField(upload_to="identity_images/", max_length=250,null=True,blank=True,default='')
     created_at=models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    # tickets = list of tickets
     objects = Usermanager()
 
+class tickets(models.Model):
+    full_name = models.CharField(max_length=255)
+    identity_number = models.IntegerField()
+    mobile_num = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    problem_desc = models.TextField()
+    employee = models.ForeignKey(members , related_name="tickets" , on_delete=models.DO_NOTHING)
+    created_at=models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+class customers(models.Model):
+    full_name = models.CharField(max_length=255)
+    identity_number = models.IntegerField(unique=True)
+    mobile_num = models.CharField(max_length=255)
+    address= models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    created_at=models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+
+
+# member table method --------------------------------------------------------------------------------
 # register new member
 def Register(data, files):
     first_name = data['first_name']
@@ -127,3 +170,7 @@ def Login(request):
 # get all employee
 def get_employees(request):
     return members.objects.all()
+
+# tickets table method --------------------------------------------------------------------------------
+def add_ticket(full_name,identity_number,mobile_num,address,problem_desc,employee):
+    return tickets.objects.create(full_name = full_name,identity_number=identity_number,mobile_num=mobile_num,address=address,problem_desc=problem_desc,employee=employee)
