@@ -118,10 +118,10 @@
         <div class="left_content">
             <h1><span>D</span>ashboard</h1>
             <ul>
-                <li><a href="/employee_dashboard/{{employee.id}}">Your Profile</a></li>
-                <li><a href="/employee_tickets/{{employeepist.id}}">Tickets</a></li>
-                <li><a href="/employee_messages/{{employee.id}}">Messages</a></li>
-                <li><a href="/employee_send_message/{{employee.id}}">Send Message</a></li>
+                <li><a href="/dashboard_page">Your Profile</a></li>
+                <li><a href="/employee_tickets/{{employee.id}}">Tickets</a></li>
+                <li><a href="/messages_page/{{employee.id}}">notifications</a></li>
+                <li><a href="/employee_send_message">Send notification</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
@@ -134,11 +134,11 @@
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="/dashboard_page" role="tab" aria-controls="home" aria-selected="true"><b>{{employee.user_level}}</b></a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="/employe_dashboard" role="tab" aria-controls="profile" aria-selected="false">Home</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{employee.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
-                </li>
+                </li>   
             </ul><br><br>
             <div class="profile">
                 <b>Ticket from {{ticket.full_name}}</b>

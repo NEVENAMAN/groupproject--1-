@@ -121,24 +121,24 @@
                 <li><a href="/dashboard_page">Your Profile</a></li>
                 <li><a href="/employee_tickets/{{employee.id}}">Tickets</a></li>
                 <li><a href="/messages_page/{{employee.id}}">notifications</a></li>
-                <li><a href="/send_message_page">Send notification</a></li>
+                <li><a href="/employee_send_message">Send notification</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
         <div class="right_content">
             <div class="content">
                 <div class="head">
-                    <h5>Hi {{employee_.first_name}}</h5>
+                    <h5>Hi {{employee.first_name}}</h5>
                 </div>
                 <hr>
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Home</a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="/employe_dashboard" role="tab" aria-controls="profile" aria-selected="false">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{employee.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
-                    </li>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{employee.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
+                </li>
             </ul><br><br>
             <div class="profile">
                 Send Message 
@@ -168,7 +168,7 @@
                             <label for="disabledTextInput">Send to : </label>
                             <select name="send_to">
                                 {% for user in users %}
-                                    <option>{{employee.first_name}}</option>
+                                    <option>{{customer.full_name}}</option>
                                 {% endfor %}
                             </select>
                         </div>

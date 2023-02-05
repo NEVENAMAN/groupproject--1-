@@ -42,6 +42,39 @@ def login(request):
             print("4444")
         return redirect('/')  
 
+def customer_login_page(request):
+    return render(request,'customer_login_page.html')
+
+def customer_page(request):
+    if 'userid' in request.session:
+        customer = customers.objects.get(id =request.session['userid'])
+        employees = get_employees(request)
+        context = {
+            "customer" : customer,
+            'employees': employees,
+        }
+        return render(request,'customer_page.html',context)
+    else:
+        return redirect('/customer_login_page')
+
+# login method
+def customer_login(request):
+    error = customers.objects.customer_sigin_validator(request.POST)
+    if len(error) > 0:
+        print("***** 2 ")
+        for key, value in error.items():
+            messages.error(request, value, extra_tags=key)
+        return redirect('/customer_login')
+    else:
+        userId =  customer_Login(request)
+        if userId != None:
+            request.session['userid'] = userId
+            return redirect('/customer_page') 
+        else:
+            return redirect('/customer_login_page')
+
+
+
 # register page
 def register_page(request):
     return render(request,'register.html')
@@ -56,6 +89,17 @@ def register(request):
     else:
         if request.method == "POST":
             Register(request.POST, request.FILES)
+        return redirect('/')
+
+def register_client(request):
+    error = customers.objects.customer_validation(request.POST)
+    if len(error) > 0:
+        for key, value in error.items():
+            messages.error(request, value, extra_tags=key)
+        return redirect('/register_customer')
+    else:
+        if request.method == "POST":
+            Register_client(request.POST)
         return redirect('/')
 
 # register customer page
@@ -186,46 +230,59 @@ def welcome_page(request):
     return render(request,'welcome_page.html',context)
 
 
-def send_message_page(request):
+def send_message_to_employee_page(request):
     if 'userid' in request.session:
-        employee = members.objects.get(id=request.session['userid'])
-        users = get_employees(request)
+        customer = customers.objects.get(id=request.session['userid'])
+        employees = get_employee(request)
         context = {
-            "employee":employee,
+            "employees":employees,
+            'customer': customer,
         }
         return render(request,'send_message.html',context)
     else:
         return redirect('/login_page')
 
-def messages_page(request,id):
+def messages_page(request, id):
     if 'userid' in request.session:
-        user = members.objects.get(id = request.session['userid'])
-        messages_recieve =user.messages_recieve.all()
-        message_send = user.message_send.all()
+        employee = members.objects.get(id = id)
+        messages_recieve =employee.messages_recieve.all()
+        message_send = employee.message_send.all()
         context = {
-            "user" : user,
+            "employee" : employee,
             "messages_recieve" : messages_recieve,
             "message_send" : message_send, 
         }
-        return render(request,'view_messages.html',context)
+        return render(request,'employee_messages.html',context)
     else:
         return redirect('/login_page')
 
-def send_message_method(request):
-    error = tickets.objects.message_validator(request.POST)
+def employee_send_message_method(request):
+    error = Message.objects.message_validator(request.POST)
     if len(error) > 0:
         for key, value in error.items():
-            messages.error(request, value, extra_tags=key)
-        return redirect('/send_message_page')
+            Message.error(request, value, extra_tags=key)
+        return redirect('/employee_send_message_page')
     else:
         sender = members.objects.filter( first_name = request.POST['send_from'])
         print(sender[0].first_name)
         message_context = request.POST['message_context']
         send_from = sender[0]
-        reciver = members.objects.filter(first_name = request.POST['send_to'])
+        reciver = customers.objects.filter(full_name = request.POST['send_to'])
         send_to = reciver[0]
         send_message(message_context,send_from,send_to)
-        return redirect('/employee_messages/'+ str(send_from.id))
+    return redirect('/messages_page/'+ str(send_from.id))
+
+def employee_send_message(request):
+    if 'userid' in request.session:
+        employee = members.objects.get(id=request.session['userid'])
+        customers = get_all_customers(request)
+        context = {
+            "employee" : employee,
+            "customers" : customers,
+        }
+        return render(request,'employee_send_message.html',context)
+    else:
+        return redirect('/login_page')
 
 def view_message_data(request,id):
     if 'userid' in request.session:
@@ -243,3 +300,8 @@ def delete_message(request,id):
     message = Message.objects.get(id=id)
     del_message(message)
     return redirect('/messages_page/' + str(id))
+
+
+def logout(request):
+    request.session.flush()
+    return redirect('/login_page')

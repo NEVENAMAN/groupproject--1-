@@ -71,6 +71,18 @@ class Usermanager(models.Manager):
         if (bcrypt.checkpw(postData['password'].encode(), user.password.encode()) != True):
             error['incorrect_password'] = "you insert password error"
         return error
+
+    def customer_sigin_validator(self, postData):
+        error = {}
+        userid = customers.objects.filter(email = postData['email'])
+        print(postData['email'])
+        if len(userid) == 0 :
+            error['user_not_found'] = "user not exisit"
+            return error
+        user = userid[0]
+        if (bcrypt.checkpw(postData['password'].encode(), user.password.encode()) != True):
+            error['incorrect_password'] = "you insert password error"
+        return error
     
     def customer_validation(self, postData):
         errors= {}
@@ -79,10 +91,12 @@ class Usermanager(models.Manager):
             errors["full_name"] = "name should be at least 5 characters"
         if len(postData['address']) < 5:
             errors["address"] = "Address should be at least 5 characters"
+        if len(postData['email']) < 9:
+            errors["email"] = "scope of work should be at least 9 characters"
+        if len(postData['identity_number']) < 9:
+            errors["identity_number"] = "Identity number should be at least 9 characters"
         if len(postData['mobile_num']) < 9:
             errors["mobile_num"] = "number should be at least 9 characters"
-        if len(postData['identity_num']) < 9:
-            errors["identity_num"] = "scope of work should be at least 9 characters"
         if len(postData['password']) < 8:
             errors["password"] = "user password should be at least 8characters"
         if not any(characters.isupper() for characters in postData['password']):
@@ -160,11 +174,13 @@ class tickets(models.Model):
 class customers(models.Model):
     full_name = models.CharField(max_length=255)
     identity_number = models.IntegerField(unique=True)
+    email = models.CharField(max_length=25  )
     mobile_num = models.CharField(max_length=255)
     address= models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     created_at=models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    objects = Usermanager()
 
 class Message(models.Model):
     message_context = models.TextField()
@@ -197,6 +213,21 @@ def Register(data, files):
     if (data['confirm_password'] == password):
         members.objects.create(first_name = first_name , last_name = last_name, email = email , skill=skill , experience=experience , address=address ,mobile_num=mobile_num , identity_image = identity_image , password = pw_hash)
 
+
+#register Client:
+def Register_client(data):
+    full_name = data['full_name']
+    email = data['email']
+    identity_number = data['identity_number']
+    address = data['address']
+    mobile_num = data['mobile_num']
+    password =data['password']
+    pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
+    if (data['confirm_password'] == password):
+        customers.objects.create(full_name = full_name, email = email ,identity_number=identity_number, address=address ,mobile_num=mobile_num, password = pw_hash)
+
+
+
 # login current user
 def Login(request):
     user = members.objects.filter(email = request.POST['email'])
@@ -208,9 +239,22 @@ def Login(request):
     else:
         return None
 
+def customer_Login(request):
+    user = customers.objects.filter(email = request.POST['email'])
+    if user:
+        loged_user = user[0]
+        if bcrypt.checkpw(request.POST['password'].encode(), loged_user.password.encode()):
+            request.session['userid'] = loged_user.id
+            return loged_user.id
+    else:
+        return None
+
 # get all employee
 def get_employees(request):
     return members.objects.all()
+
+def get_all_customers(request):
+    return customers.objects.all()
 
 # tickets table method --------------------------------------------------------------------------------
 def add_ticket(full_name,age,identity_number,phone_number,telphone_number,email,state,street,service_desc, employee):

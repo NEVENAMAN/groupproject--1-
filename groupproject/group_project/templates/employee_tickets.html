@@ -133,7 +133,7 @@
                 <li><a href="/dashboard_page">Your Profile</a></li>
                 <li><a href="/employee_tickets/{{employee.id}}">Tickets</a></li>
                 <li><a href="/messages_page/{{employee.id}}">notifications</a></li>
-                <li><a href="/send_message_page">Send notification</a></li>
+                <li><a href="/employee_send_message">Send notification</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
@@ -146,7 +146,7 @@
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Home</a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="/employe_dashboard" role="tab" aria-controls="profile" aria-selected="false">Home</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{employee.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
@@ -174,7 +174,7 @@
                                 <td>{{ticket.employee.first_name}} {{ticket.employee.last_name}}</td>
                                 <td>
                                     <div class="actions">
-                                        <a type="submit" class="btn btn-primary" href="/employee_ticket_data/{{ticket.id}}">View</a>
+                                        <a type="submit" class="btn btn-primary" href="/view_ticket/{{ticket.id}}">View</a>
                                         <a type="submit" class="btn btn-primary" href="/del_employee_ticket/{{ticket.id}}">Delete</a>
                                     </div>
                                 </td>
