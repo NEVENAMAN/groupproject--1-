@@ -103,7 +103,7 @@
       <h3>Send Ticket for request service</h3>
       <hr>
       <br>
-      <form action="/send_visitor_request" method="post">
+      <form action="/send_employee_ticket" method="POST">
         {% csrf_token %}
         <fieldset>
             <div class="form-group">
@@ -188,17 +188,17 @@
                     {% endif %}
             {% endfor %}
             <div class="form-group">
-                <label for="disabledTextInput">Therapist</label>
-                <select name="therapist" class="form-control">
-                    <option>{{therapist.treatment_field}}</option>
-                    {% for therapist in therapists %}
-                        <option>{{therapist.treatment_field}}</option>
+                <label for="disabledTextInput">Employee</label>
+                <select name="employee" class="form-control">
+                    <option>{{employees}}</option>
+                    {% for employee in employees %}
+                        <option>{{employee.first_name}}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <input type="hidden" name="therapist_id" value="{{therapist.id}}">
+            </div> -->
+            <input type="hidden" name="employee_id" value="{{employee.id}}">
             {% for message in messages %}
-                    {% if message.extra_tags == 'therapist' %}
+                    {% if message.extra_tags == 'employee' %}
                         <p class="error_message">* {{message}}</p>
                     {% endif %}
             {% endfor %}
