@@ -32,4 +32,12 @@ urlpatterns = [
     path('view_message_data/<int:id>',views.view_message_data),
     path('delete_message/<int:id>',views.delete_message),
     path('welcome_page',views.welcome_page),
+    path('members_page',views.member_page),
+    path('delete_member/<int:id>',views.del_member),
+    path('view_members/<int:id>',views.view_member),
+    path('customer_messages_page/<int:id>',views.customer_messages_page),
+    path('customer_view_message_data/<int:id>',views.customer_view_message_data)
+
+
+
 ]

@@ -182,62 +182,31 @@
                 <p>bayti is a palestenian company specialized in home service maintenance . We Help our Customer to Have
                     satisfied impression .</p>
             </div>
-            <ul>
-            <li><a href="/customer_messages_page/{{customer.id}}">notifications</a></li>
-            </ul>
-
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Message Recieved</th>
+                            <th scope="col">From</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages_recieve %}
+                            <tr>
+                                <th scope="row">{{message.message_context}}</th>
+                                <td>{{message.send_from.full_name}}</td>
+                                <td>{{message.created_at}}</td>
+                                <td>
+                                    <div class="actions">
+                                        <a type="submit" class="btn btn-primary" href="/customer_view_message_data/{{message.id}}">View</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-        <div id="main_div">
-            {% for employee in employees %}
-            {% if forloop.counter0|divisibleby:2 %}
-            <div style="display: flex;">
-                {% endif %}
-                <div id="block_div" class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-                    <div class="my-3 py-3">
-                        <!-- {{forloop.counter0}} -->
-                        <h2 class="display-5"> {{employee.first_name}} {{employee.last_name}}</h2>
-                        <p class="lead">{{employee.skill}}</p>
-                    </div>
-                    <div class="bg-dark shadow-sm mx-auto"
-                        style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
-                        <div class="content">
-                            <div class="left">
-                                <img src="media/{{employee.identity_image}}">
-                            </div>
-                            <div class="right">
-                                <a href="/send_ticket/{{employee.id}}" class="btn btn-primary">Send Ticket</a><br><br>
-                                <a href="#" class="btn btn-primary">Add Review</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% if not forloop.counter0|divisibleby:2 %}
-            </div>
-            {% endif %}
-            {% endfor %}
-            <!-- 
-                    <div id="inline_div" class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-                    <div class="my-3 p-3">
-                        <h2 class="display-5">{{forloop.counter0}} {{employee.first_name}} {{employee.last_name}}</h2>
-                        <p class="lead">{{employee.skill}}.</p>
-                    </div>
-                    <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
-                        <div class="content">
-                            <div class="left">
-                                <img src="media/{{employee.identity_image}}">
-                            </div>
-                            <div class="right">
-                                <a href="#" class="btn btn-primary">Send Ticket</a><br>
-                                <a href="#" class="btn btn-primary">Send Review</a>
-                            </div>
-                        </div></div>
-                    </div>
-                    <br>
-            -->
 
-        </div>
-        <br>
 
 
     </main>

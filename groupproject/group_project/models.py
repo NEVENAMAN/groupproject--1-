@@ -184,7 +184,7 @@ class customers(models.Model):
 
 class Message(models.Model):
     message_context = models.TextField()
-    send_to = models.ForeignKey(members, related_name="messages_recieve" , on_delete=models.DO_NOTHING)
+    send_to = models.ForeignKey(customers, related_name="messages_recieve" , on_delete=models.DO_NOTHING)
     send_from = models.ForeignKey(members , related_name="message_send" , on_delete=models.DO_NOTHING)
     created_at=models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -287,5 +287,10 @@ def delete_ticket(id):
 def send_message(message_context,send_from,send_to):
     return Message.objects.create(message_context = message_context , send_from = send_from , send_to = send_to)
 
-def del_message(message):
+def del_message(id):
+    message = Message.objects.get(id=id)
     return message.delete()
+
+def delete_user(id):
+    user = members.objects.get(id=id)
+    return user.delete()

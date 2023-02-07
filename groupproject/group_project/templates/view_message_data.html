@@ -144,27 +144,58 @@
             </ul><br><br>
 
 <div class="profile">
-    Message data
-    <hr>
-    <table>
+    <table class="table">
+        <thead class="thead-dark">
         <tr>
-            <td>Message context :   </td>
-            <td>{{message.message_context}}</td>
+            <th scope="col">Message Recieve</th>
+            <th scope="col">From</th>
+            <th scope="col">Date</th>
+            <th scope="col">Actions</th>
         </tr>
-        <tr>
-            <td>From :   </td>
-            <td>{{message.send_from.first_name}} {{message.send_from.last_name}}</td>
-        </tr>
-        <tr>
-            <td>Object :   </td>
-            <td>{{message.send_to.first_name}} {{message.send_to.last_name}}</td>
-        </tr>
-        <tr>
-            <td>Date :   </td>
-            <td>{{message.created_at}}</td>
-        </tr>
+        </thead>
+        <tbody>
+            {% for message in messages_recieve %}
+                <tr>
+                    <th scope="row">{{message.message_context}}</th>
+                    <td>{{message.send_from.first_name}} {{message.send_from.last_name}}</td>
+                    <td>{{message.created_at}}</td>
+                    <td>
+                        <div class="actions">
+                            <a type="submit" class="btn btn-primary" href="/view_message_data/{{message.id}}">View</a>
+                            <a type="submit" class="btn btn-primary" href="/delete_message/{{message.id}}">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
-</div>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Message Send</th>
+            <th scope="col">To</th>
+            <th scope="col">Date</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for message in message_send %}
+            <tr>
+                <th scope="row">{{message.message_context}}</th>
+                <td>{{message.send_to.first_name}} {{message.send_to.last_name}}</td>
+                <td>{{message.created_at}}</td>
+                <td>
+                        <div class="actions">
+                            <a type="submit" class="btn btn-primary" href="/view_message_data/{{message.id}}">View</a>
+                            <a type="submit" class="btn btn-primary" href="/delete_message/{{message.id}}">Delete</a>
+                        </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 </div>
+</body>
+</html>

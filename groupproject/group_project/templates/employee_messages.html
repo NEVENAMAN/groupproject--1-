@@ -141,7 +141,7 @@
                 </li>
             </ul><br><br>
             <div class="profile">
-                <table class="table">
+                <!-- <table class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Message Recieved</th>
@@ -154,18 +154,18 @@
                         {% for message in messages_recieve %}
                             <tr>
                                 <th scope="row">{{message.message_context}}</th>
-                                <td>{{message.send_from.first_name}} {{message.send_from.last_name}}</td>
+                                <td>{{message.send_from.full_name}}</td>
                                 <td>{{message.created_at}}</td>
                                 <td>
                                     <div class="actions">
-                                        <a type="submit" class="btn btn-primary" href="/therapist_message_data/{{message.id}}">View</a>
-                                        <a type="submit" class="btn btn-primary" href="/delete_message_therapist/{{message.id}}">Delete</a>
+                                        <a type="submit" class="btn btn-primary" href="/view_message_data/{{message.id}}">View</a>
+                                        <a type="submit" class="btn btn-primary" href="/delete_message/{{message.id}}">Delete</a>
                                     </div>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table> -->
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
@@ -179,12 +179,12 @@
                     {% for message in message_send %}
                         <tr>
                             <th scope="row">{{message.message_context}}</th>
-                            <td>{{message.send_to.first_name}} {{message.send_to.last_name}}</td>
+                            <td>{{message.send_to.full_name}}</td>
                             <td>{{message.created_at}}</td>
                             <td>
                                     <div class="actions">
-                                        <a type="submit" class="btn btn-primary" href="/therapist_message_data/{{message.id}}">View</a>
-                                        <a type="submit" class="btn btn-primary" href="/delete_message_therapist/{{message.id}}">Delete</a>
+                                        <a type="submit" class="btn btn-primary" href="/view_message_data/{{message.id}}">View</a>
+                                        <a type="submit" class="btn btn-primary" href="/delete_message/{{message.id}}">Delete</a>
                                     </div>
                             </td>
                         </tr>

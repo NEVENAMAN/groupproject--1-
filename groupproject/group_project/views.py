@@ -107,8 +107,15 @@ def register_customer_page(request):
     return render(request,'register_customer.html')
 # admin dashboard
 def admin_dash(request):
-    return render(request,'admin_dashboard.html')
-
+    if 'userid' in request.session:
+        employee = members.objects.get(id =request.session['userid'])
+        context = {
+            "employee" : employee,
+        }
+        return render(request,'admin_dashboard.html',context)
+    else:
+        return redirect('/login_page')
+    
 # admin dashboard
 def employe_dash(request):
     if 'userid' in request.session:
@@ -245,10 +252,12 @@ def send_message_to_employee_page(request):
 def messages_page(request, id):
     if 'userid' in request.session:
         employee = members.objects.get(id = id)
-        messages_recieve =employee.messages_recieve.all()
+        customer = customers.objects.get(id = id)
+        messages_recieve =customer.messages_recieve.all()
         message_send = employee.message_send.all()
         context = {
             "employee" : employee,
+            "customer" : customer,
             "messages_recieve" : messages_recieve,
             "message_send" : message_send, 
         }
@@ -297,11 +306,67 @@ def view_message_data(request,id):
         return redirect('/login_page')
 
 def delete_message(request,id):
-    message = Message.objects.get(id=id)
-    del_message(message)
-    return redirect('/messages_page/' + str(id))
+    employee = members.objects.get(id = request.session['userid'])
+    del_message(id)
+    return redirect('/messages_page/' +  str(employee.id))
 
 
 def logout(request):
     request.session.flush()
     return redirect('/login_page')
+
+def member_page(request):
+    if 'userid' in request.session:
+        members = get_employees(request)
+        context = {
+            "members" : members,
+        }
+        return render(request,'members.html',context)
+    else:
+        return redirect('/login_page')
+
+def del_member(request,id):
+    delete_user(id)
+    return redirect('/members_page')
+
+def view_member(request,id):
+    if 'userid' in request.session:
+        member = members.objects.get(id=id)
+        context = {
+            "member" : member,
+            
+        }
+        return render(request,'view_therapist.html',context)
+    else:
+        return redirect('/login_page') 
+
+
+
+def customer_messages_page(request, id):
+    if 'userid' in request.session:
+        employee = members.objects.get(id = id)
+        customer = customers.objects.get(id = id)
+        messages_recieve =customer.messages_recieve.all()
+        message_send = employee.message_send.all()
+        context = {
+            "employee" : employee,
+            "customer" : customer,
+            "messages_recieve" : messages_recieve,
+            "message_send" : message_send, 
+        }
+        return render(request,'customer_messages.html',context)
+    else:
+        return redirect('/login_page')
+
+
+def customer_view_message_data(request,id):
+    if 'userid' in request.session:
+        employee = members.objects.get(id=request.session['userid'])
+        message = Message.objects.get(id=id)
+        context = {
+            "employee" :employee,
+            "message" : message,
+        }
+        return render(request,'customer_view_message_data.html',context)
+    else:
+        return redirect('/login_page')
