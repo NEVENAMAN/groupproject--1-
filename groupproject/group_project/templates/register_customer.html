@@ -103,7 +103,7 @@
       <h3>Register customer </h3>
       <hr>
       <br>
-      <form class="form-signin" action='/register' method="POST" enctype="multipart/form-data">
+      <form class="form-signin" action='/register_client' method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-label-group">
             <label for="inputPassword">Full name</label>
@@ -115,11 +115,20 @@
             {% endif %}
         {% endfor %}
         <div class="form-label-group">
-            <label for="inputEmail">Identity Number</label>
-            <input type="email" name="identity_number" id="inputEmail" class="form-control" placeholder="Identity Number" autofocus>
+            <label for="inputEmail">Email Address</label>
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="email" autofocus>
         </div>
         {% for message in messages %}
-            {% if message.extra_tags == 'identity_num' %}
+          {% if message.extra_tags == 'email' %}
+              <p class="error_message">* {{message}}</p>
+          {% endif %}
+        {% endfor %}
+        <div class="form-label-group">
+          <label for="inputEmail">Identity Numer</label>
+          <input type="text" name="identity_number" id="identity_number" class="form-control" placeholder="Identity Number" autofocus>
+      </div>
+        {% for message in messages %}
+            {% if message.extra_tags == 'identity_number' %}
                 <p class="error_message">* {{message}}</p>
             {% endif %}
         {% endfor %}

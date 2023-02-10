@@ -70,6 +70,8 @@
         }
         .right_content .head{
             display: flex;
+            padding-top: 10px;
+            padding-right: 10px;
             margin-left: 1200px;
             justify-content: space-between;
             background-color: white;
@@ -110,15 +112,6 @@
             margin-right: 12px;
             margin-top: 6px;
         }
-        .right_content .return_home{
-            position: relative;
-            top: 30px;
-            padding: 0px;
-            left: 20px;
-        }
-        .right_content .return_home a{
-            color: black;
-        }
         
     </style>
 </head>
@@ -127,52 +120,36 @@
         <div class="left_content">
             <h1><span>D</span>ashboard</h1>
             <ul>
-                <li><a href="/dashboard_page">Your Profile</a></li>
-                <li><a href="/members_page">Employees</a></li>
-                <li><a href="/requests_page">Tickets</a></li>
-                <li><a href="/add_request_page">Add employee</a></li>
-                <li><a href="/messages_page/{{admin.id}}">Messages</a></li>
-                <li><a href="/send_message_page">Send Message</a></li>
-                <li><a href="/send_message_page">Send Notification</a></li>
+                <li><a href="/admin_dashboard">Your Profile</a></li>
+                <li><a href="/members_page">Members</a></li>
+                <li><a href="/messages_page/{{employee.id}}">notifications</a></li>
+                <li><a href="/employee_send_message">Send notification</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
         <div class="right_content">
             <div class="content">
-                <div class="return_home">
-                    <a href="#">Bayti for home service maintenance</a>
-                </div>
                 <div class="head">
-                    <h5>Hi {{admin.first_name}}</h5>
-                    <!-- <form action="/edit_profile_by_admin/{{admin.id}}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Edit" class="btn btn-primary">
-                    </form> -->
+                    <h5>Hi {{employee.first_name}}</h5>
                 </div>
                 <hr>
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="/dashboard_page" role="tab" aria-controls="home" aria-selected="true"><b>{{admin.user_level}}</b></a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="/admin_dashboard" role="tab" aria-controls="profile" aria-selected="false">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Home</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{admin.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="sigin-tab" data-toggle="tab" href="/edit_profile_by_admin/{{admin.id}}" role="tab" aria-controls="contact" aria-selected="false">Profile</a>
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="/edit_login_page/{{employee.id}}" role="tab" aria-controls="contact" aria-selected="false">Login information</a>
                 </li>
             </ul><br><br>
             <div class="profile">
-                <img src="{% static 'image/side-view-happy-woman-with-crossed-arms.jpg' %}" width="50px">
+                <img src="{% static 'images/enthusiastic-black-guy-with-short-hair-expressing-positive-emotions-indoor-shot-blissful-african-man-enjoying.jpg' %}" width="50px">
                 <div class="content">
-                    <h4>{{admin.first_name}} {{admin.last_name}} . {{admin.user_level}}</h4>
-                    <img src="{% static 'image/email.png' %}"> {{admin.email}}<br>
-                    <img src="{% static 'image/number.png' %}"> {{admin.number}}<br>
-                    <img src="{% static 'image/desc.png' %}"> {{admin.treatment_field}}<br>
-                    <img src="{% static 'image/profil.png' %}"> {{admin.desc}}<br>
+                    <h4>{{employee.first_name}} {{employee.last_name}}</h4>
+                    <img src="{% static 'images/email.png' %}">{{employee.email}}<br>
+                    <img src="{% static 'images/number.png' %}">{{employee.skill}}<br>
+                    <img src="{% static 'images/desc.png' %}">{{employee.address}}<br>
+                    <img src="{% static 'images/profil.png' %}">{{employee.mobile_num}}<br>
                 </div>
             </div>
         </div>
